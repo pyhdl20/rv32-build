@@ -39,6 +39,8 @@ cat << EOF1 > bb-dockerfile
   RUN apt-get install -y autoconf automake autotools-dev curl libmpc-dev \
             libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo \
             gperf libtool patchutils bc zlib1g-dev git libexpat1-dev
+  #for iverilog
+  RUN apt-get install -y iverilog
 
  ARG UNAME=rv32user
 
