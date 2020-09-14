@@ -1,0 +1,98 @@
+
+hashes of repos:
+
+
+picorv32:
+
+~/buildfiles/picorv32$ git log -1
+commit f48f5fe9704fd34bf3de39dbced427ea2e2d8895 (HEAD -> master, origin/master, origin/HEAD)
+Author: Clifford Wolf <clifford@clifford.at>
+Date:   Tue Mar 19 14:33:50 2019 +0100
+
+    Add Verilator version infos
+
+    Signed-off-by: Clifford Wolf <clifford@clifford.at>
+
+~/buildfiles/picorv32$ ls -lrt
+-rw-rw-r--  1 rv32 rv32 29701 Sep 13 13:30 README.md
+....
+drwxrwxr-x  2 rv32 rv32  4096 Sep 13 13:30 tests
+-rw-rw-r--  1 rv32 rv32  8401 Sep 13 16:33 Makefile
+drwxr-xr-x 15 rv32 rv32  4096 Sep 13 16:34 riscv-gnu-toolchain-riscv32i
+drwxr-xr-x 15 rv32 rv32  4096 Sep 13 17:15 riscv-gnu-toolchain-riscv32ic
+drwxr-xr-x 15 rv32 rv32  4096 Sep 13 17:56 riscv-gnu-toolchain-riscv32im
+drwxr-xr-x 15 rv32 rv32  4096 Sep 13 18:36 riscv-gnu-toolchain-riscv32imc
+
+
+tools:
+
+~/buildfiles/picorv32/riscv-gnu-toolchain-riscv32i$ find . -name '.git'
+./riscv-gdb/.git
+./riscv-glibc/.git
+./riscv-gcc/.git
+./riscv-binutils/.git
+./riscv-newlib/.git
+./.git
+
+~/buildfiles/picorv32/riscv-gnu-toolchain-riscv32i$ git log -1
+commit 411d1345507e5313c3575720f128be9e6c0ed941 (HEAD)
+Merge: 75504a4 b4e385c
+Author: Jim Wilson <jimw@sifive.com>
+Date:   Wed Nov 28 14:49:17 2018 -0800
+
+    Merge pull request #396 from riscv/use-fsf-gdb
+
+    Switch to FSF GDB plus our local not-upstreamed gdb sim port.
+
+~/buildfiles/picorv32/riscv-gnu-toolchain-riscv32i/riscv-gdb$ git log -1
+commit 044a7fdd5d0e6f3a4fc60e43673368e387c4b753 (HEAD, origin/fsf-gdb-with-sim)
+Author: Jim Wilson <jimw@sifive.com>
+Date:   Tue Nov 27 12:22:33 2018 -0800
+
+    Add simulator from riscv-binutils-2.29 branch.
+
+~/buildfiles/picorv32/riscv-gnu-toolchain-riscv32i/riscv-glibc$ git log -1
+commit 2f626de717a86be3a1fe39e779f0b179e13ccfbb (HEAD)
+Author: Palmer Dabbelt <palmer@dabbelt.com>
+Date:   Mon Aug 21 17:00:18 2017 -0700
+
+    Handle errno a bit more correctly
+
+~/buildfiles/picorv32/riscv-gnu-toolchain-riscv32i/riscv-gcc$ git log -1
+commit be9abee2aaa919ad8530336569d17b5a60049717 (HEAD, origin/riscv-gcc-8.2.0)
+Merge: 489c9e74775 427ca143482
+Author: Jim Wilson <jimw@sifive.com>
+Date:   Mon Oct 8 11:50:03 2018 -0700
+
+    Merge pull request #139 from kito-cheng/riscv-gcc-8.2.0
+
+    Back-port from trunk to 8.2.0
+
+~/buildfiles/picorv32/riscv-gnu-toolchain-riscv32i/riscv-binutils$ git log -1
+commit 82dcb8613e1b1fb2989deffde1d3c9729695ff9c (HEAD, origin/riscv-binutils-2.31.1)
+Merge: 0860693812 d7058990c5
+Author: Jim Wilson <jimw@sifive.com>
+Date:   Wed Oct 17 11:19:22 2018 -0700
+
+    Merge pull request #162 from kito-cheng/riscv-binutils-2.31.1
+
+    Back-port from trunk to 2.31.1
+
+~/buildfiles/picorv32/riscv-gnu-toolchain-riscv32i/riscv-newlib$ git log -1
+commit 320b28ea27c71df7afe62b21a220f77aef9eb88a (HEAD)
+Author: Jeff Johnston <jjohnstn@redhat.com>
+Date:   Thu May 24 23:53:15 2018 -0400
+
+    Fix issue with malloc_extend_top
+
+    - when calculating a correction to align next brk to page boundary,
+      ensure that the correction is less than a page size
+    - if allocating the correction fails, ensure that the top size is
+      set to brk + sbrk_size (minus any front alignment made)
+
+    Signed-off-by: Jeff Johnston <jjohnstn@redhat.com>
+
+.. the im, ic, imc are the same hashes
+
+
+

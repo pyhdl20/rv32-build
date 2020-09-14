@@ -1,0 +1,33 @@
+
+build the toolchain
+
+  get under the picorv32 directory
+
+  edit Makefile to remove 3 sudo commands
+  run
+    make download-tools
+
+  which retrieves in 22 minutes about 2G-byte code to /var/cache/distfiles: 
+    + git clone --bare https://github.com/riscv/riscv-gnu-toolchain /var/....
+    Receiving objects: 100% (7772/7772), 4.74 MiB | 1.80 MiB/s, done.
+
+    + git clone --bare https://github.com/riscv/riscv-binutils-gdb /var/....
+    Receiving objects: 100% (903802/903802), 348.34 MiB | 1.94 MiB/s, done.
+
+    + git clone --bare https://github.com/riscv/riscv-gcc /var/....
+    Receiving objects: 100% (2460361/2460361), 1.21 GiB | 1.92 MiB/s, done.
+
+    + git clone --bare https://github.com/riscv/riscv-glibc /var/....
+    Receiving objects: 100% (497741/497741), 155.51 MiB | 1.73 MiB/s, done.
+
+    + git clone --bare https://github.com/riscv/riscv-newlib /var/....
+    Receiving objects: 100% (170437/170437), 100.70 MiB | 1.93 MiB/s, done.
+
+  edit Makefile to comment out 3 suffixes, the -i, -im, -ic. keep only -imc under the build-tools target
+  run
+    make build-tools
+
+  note: without editing the Makefile, it builds 4 variants - each uses 5.5G disk space, install to 800M. 
+  building 4 variants took 163 minutes or 2 hours 40 minutes. each took 40 minutes. 
+
+

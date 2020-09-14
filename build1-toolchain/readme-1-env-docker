@@ -1,0 +1,35 @@
+
+
+run once to create and get under the top-level directory:
+
+  install docker.io on ubuntu 18.04 if not already installed
+  add your local user name to the group docker
+  log out and back in to take effect of the group identity
+  run to get to the top-level directory
+
+    mkdir ~/dockershare
+    cd ~/dockershare
+
+
+create the container image: 
+
+    bash bb.bash
+
+
+inspect /opt/riscv32 and /var/cache/distfiles paths:
+
+    mkdir sharedfiles
+    cd sharedfiles
+    git clone https://github.com/.../picorv32
+    cd ..
+
+
+create the container: 
+
+    bash bb-create.bash
+
+  example to enter into the container: 
+
+    docker exec -it rv32build /bin/bash
+
+
