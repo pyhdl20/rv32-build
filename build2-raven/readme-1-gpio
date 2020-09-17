@@ -1,0 +1,223 @@
+
+
+~/buildfiles/raven-picorv32/verilog/raven_gpio$ git log -1
+commit a560c46ebe38c9f7317914d14d3c56d709fc1189 (HEAD -> minghuadev-develop, py20/minghuadev-develop)
+Author: minghuadev <minghuadev@noreply.users.github.com>
+Date:   Mon Sep 14 15:33:21 2020 +0000
+    raven_gpio move .hex out to -original
+
+
+
+edit to add this line to the makefile: cp raven_gpio.elf raven_gpio.elf-backup
+
+
+
+~/buildfiles/raven-picorv32/verilog/raven_gpio$ make clean
+
+~/buildfiles/raven-picorv32/verilog/raven_gpio$ make
+/opt/riscv32imc/bin//riscv32-unknown-elf-gcc -march=rv32imc -Wl,-Bstatic,-T,../sections.lds,--strip-debug -ffreestanding -nostdlib -o raven_gpio.elf ../start.s raven_gpio.c
+cp raven_gpio.elf raven_gpio.elf-backup
+/opt/riscv32imc/bin//riscv32-unknown-elf-objcopy -O verilog raven_gpio.elf /dev/stdout | sed -e '1 s/@00000000/@00100000/; 2,65537 d;' > raven_gpio.hex
+iverilog -I. -I..  raven_gpio_tb.v -o raven_gpio.vvp
+vvp raven_gpio.vvp
+Memory 5 bytes = 0xxx 0xxx 0xxx 0xxx 0xxx
+Reading raven_gpio.hex
+raven_gpio.hex loaded into memory
+Memory 5 bytes = 0x93 0x00 0x00 0x00 0x93
+VCD info: dumpfile raven_gpio.vcd opened for output.
+GPIO state = zzzzzzzzzzzzzzzz
+GPIO state = z0z00z0zz0z00z0z
+GPIO state = z1z11z1zz1z11z1z
+GPIO state = z0z00z0zz0z00z0z
++1000 cycles
+rm raven_gpio.elf raven_gpio.vvp
+
+
+
+~/buildfiles/raven-picorv32/verilog/raven_gpio$ /opt/riscv32imc/bin/riscv32-unknown-elf-objdump -x -S raven_gpio.elf-backup
+
+raven_gpio.elf-backup:     file format elf32-littleriscv
+raven_gpio.elf-backup
+architecture: riscv:rv32, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x00000000
+
+Program Header:
+    LOAD off    0x00001000 vaddr 0x00000000 paddr 0x00000000 align 2**12
+         filesz 0x001001a9 memsz 0x001001a9 flags rwx
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .memory       001001a9  00000000  00000000  00001000  2**2
+                  CONTENTS, ALLOC, LOAD, CODE
+SYMBOL TABLE:
+00000000 l    d  .memory        00000000 .memory
+00000000 l    df *ABS*  00000000 /tmp/cccX0nOw.o
+00100000 l       .memory        00000000 start
+0010007a l       .memory        00000000 loop
+001000b4 l       .memory        00000000 flashio_worker_L1
+00100094 l       .memory        00000000 flashio_worker_L4
+00100104 l       .memory        00000000 flashio_worker_L3
+001000be l       .memory        00000000 flashio_worker_LY
+001000c0 l       .memory        00000000 flashio_worker_L2
+001000f2 l       .memory        00000000 flashio_worker_LX
+00000000 l    df *ABS*  00000000 raven_gpio.c
+0010007c g       .memory        00000000 flashio_worker_begin
+00100110 g       .memory        00000000 flashio_worker_end
+00000000 g       .memory        00000000 sram
+00100110 g     F .memory        00000088 main
+
+
+
+Disassembly of section .memory:
+
+00000000 <sram>:
+        ...
+
+00100000 <start>:
+  100000:       00000093                li      ra,0
+  100004:       00000193                li      gp,0
+  100008:       00000213                li      tp,0
+  10000c:       00000293                li      t0,0
+  100010:       00000313                li      t1,0
+  100014:       00000393                li      t2,0
+  100018:       00000413                li      s0,0
+  10001c:       00000493                li      s1,0
+  100020:       00000513                li      a0,0
+  100024:       00000593                li      a1,0
+  100028:       00000613                li      a2,0
+  10002c:       00000693                li      a3,0
+  100030:       00000713                li      a4,0
+  100034:       00000793                li      a5,0
+  100038:       00000813                li      a6,0
+  10003c:       00000893                li      a7,0
+  100040:       00000913                li      s2,0
+  100044:       00000993                li      s3,0
+  100048:       00000a13                li      s4,0
+  10004c:       00000a93                li      s5,0
+  100050:       00000b13                li      s6,0
+  100054:       00000b93                li      s7,0
+  100058:       00000c13                li      s8,0
+  10005c:       00000c93                li      s9,0
+  100060:       00000d13                li      s10,0
+  100064:       00000d93                li      s11,0
+  100068:       00000e13                li      t3,0
+  10006c:       00000e93                li      t4,0
+  100070:       00000f13                li      t5,0
+  100074:       00000f93                li      t6,0
+  100078:       2861                    jal     100110 <main>
+
+0010007a <loop>:
+  10007a:       a001                    j       10007a <loop>
+
+0010007c <flashio_worker_begin>:
+  10007c:       020002b7                lui     t0,0x2000
+  100080:       12000313                li      t1,288
+  100084:       00629023                sh      t1,0(t0) # 2000000 <main+0x1effef0>
+  100088:       000281a3                sb      zero,3(t0)
+  10008c:       c605                    beqz    a2,1000b4 <flashio_worker_L1>
+  10008e:       4f21                    li      t5,8
+  100090:       0ff67393                andi    t2,a2,255
+
+00100094 <flashio_worker_L4>:
+  100094:       0073de93                srli    t4,t2,0x7
+  100098:       01d28023                sb      t4,0(t0)
+  10009c:       010eee93                ori     t4,t4,16
+  1000a0:       01d28023                sb      t4,0(t0)
+  1000a4:       0386                    slli    t2,t2,0x1
+  1000a6:       0ff3f393                andi    t2,t2,255
+  1000aa:       1f7d                    addi    t5,t5,-1
+  1000ac:       fe0f14e3                bnez    t5,100094 <flashio_worker_L4>
+  1000b0:       00628023                sb      t1,0(t0)
+
+001000b4 <flashio_worker_L1>:
+  1000b4:       c9a1                    beqz    a1,100104 <flashio_worker_L3>
+  1000b6:       02000f13                li      t5,32
+  1000ba:       00052383                lw      t2,0(a0)
+
+001000be <flashio_worker_LY>:
+  1000be:       4fa1                    li      t6,8
+
+001000c0 <flashio_worker_L2>:
+  1000c0:       01f3de93                srli    t4,t2,0x1f
+  1000c4:       01d28023                sb      t4,0(t0)
+  1000c8:       010eee93                ori     t4,t4,16
+  1000cc:       01d28023                sb      t4,0(t0)
+  1000d0:       0002ce83                lbu     t4,0(t0)
+  1000d4:       002efe93                andi    t4,t4,2
+  1000d8:       001ede93                srli    t4,t4,0x1
+  1000dc:       0386                    slli    t2,t2,0x1
+  1000de:       01d3e3b3                or      t2,t2,t4
+  1000e2:       1f7d                    addi    t5,t5,-1
+  1000e4:       000f1763                bnez    t5,1000f2 <flashio_worker_LX>
+  1000e8:       00752023                sw      t2,0(a0)
+  1000ec:       0511                    addi    a0,a0,4
+  1000ee:       00052383                lw      t2,0(a0)
+
+001000f2 <flashio_worker_LX>:
+  1000f2:       1ffd                    addi    t6,t6,-1
+  1000f4:       fc0f96e3                bnez    t6,1000c0 <flashio_worker_L2>
+  1000f8:       15fd                    addi    a1,a1,-1
+  1000fa:       f1f1                    bnez    a1,1000be <flashio_worker_LY>
+  1000fc:       000f0463                beqz    t5,100104 <flashio_worker_L3>
+  100100:       00752023                sw      t2,0(a0)
+
+00100104 <flashio_worker_L3>:
+  100104:       08000313                li      t1,128
+  100108:       006281a3                sb      t1,3(t0)
+  10010c:       8082                    ret
+  10010e:       0001                    nop
+
+00100110 <main>:
+  100110:       1101                    addi    sp,sp,-32
+  100112:       ce22                    sw      s0,28(sp)
+  100114:       1000                    addi    s0,sp,32
+  100116:       030007b7                lui     a5,0x3000
+  10011a:       07a1                    addi    a5,a5,8
+  10011c:       6719                    lui     a4,0x6
+  10011e:       a5a70713                addi    a4,a4,-1446 # 5a5a <sram+0x5a5a>
+  100122:       c398                    sw      a4,0(a5)
+  100124:       030007b7                lui     a5,0x3000
+  100128:       0791                    addi    a5,a5,4
+  10012a:       6729                    lui     a4,0xa
+  10012c:       5a570713                addi    a4,a4,1445 # a5a5 <sram+0xa5a5>
+  100130:       c398                    sw      a4,0(a5)
+  100132:       030007b7                lui     a5,0x3000
+  100136:       6741                    lui     a4,0x10
+  100138:       177d                    addi    a4,a4,-1
+  10013a:       c398                    sw      a4,0(a5)
+  10013c:       030007b7                lui     a5,0x3000
+  100140:       0007a023                sw      zero,0(a5) # 3000000 <main+0x2effef0>
+  100144:       fe042623                sw      zero,-20(s0)
+  100148:       a031                    j       100154 <main+0x44>
+  10014a:       fec42783                lw      a5,-20(s0)
+  10014e:       0785                    addi    a5,a5,1
+  100150:       fef42623                sw      a5,-20(s0)
+  100154:       fec42703                lw      a4,-20(s0)
+  100158:       05f5e7b7                lui     a5,0x5f5e
+  10015c:       0ff78793                addi    a5,a5,255 # 5f5e0ff <main+0x5e5dfef>
+  100160:       fee7d5e3                bge     a5,a4,10014a <main+0x3a>
+  100164:       030007b7                lui     a5,0x3000
+  100168:       6741                    lui     a4,0x10
+  10016a:       177d                    addi    a4,a4,-1
+  10016c:       c398                    sw      a4,0(a5)
+  10016e:       fe042623                sw      zero,-20(s0)
+  100172:       a031                    j       10017e <main+0x6e>
+  100174:       fec42783                lw      a5,-20(s0)
+  100178:       0785                    addi    a5,a5,1
+  10017a:       fef42623                sw      a5,-20(s0)
+  10017e:       fec42703                lw      a4,-20(s0)
+  100182:       05f5e7b7                lui     a5,0x5f5e
+  100186:       0ff78793                addi    a5,a5,255 # 5f5e0ff <main+0x5e5dfef>
+  10018a:       fee7d5e3                bge     a5,a4,100174 <main+0x64>
+  10018e:       030007b7                lui     a5,0x3000
+  100192:       0007a023                sw      zero,0(a5) # 3000000 <main+0x2effef0>
+  100196:       b77d                    j       100144 <main+0x34>
+  100198:       3a434347                fmsub.d ft6,ft6,ft4,ft7,rmm
+  10019c:       2820                    fld     fs0,80(s0)
+  10019e:       29554e47                fmsub.s ft8,fa0,fs5,ft5,rmm
+  1001a2:       3820                    fld     fs0,112(s0)
+  1001a4:       322e                    fld     ft4,232(sp)
+  1001a6:       302e                    fld     ft0,232(sp)
+
+
